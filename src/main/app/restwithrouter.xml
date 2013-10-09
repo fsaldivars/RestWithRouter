@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:rest-router="http://www.mulesoft.org/schema/mule/rest-router" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/rest-router http://www.mulesoft.org/schema/mule/rest-router/current/mule-rest-router.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<flow name="RestWithRouterFlow" doc:name="RestWithRouterFlow">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8088" doc:name="HTTP" />
+
+		<rest-router:router templateUri="/client/{accountID}/{userID}/get">
+			<rest-router:get>
+				<flow-ref name="ProcessGET" doc:name="Process GET" />
+			</rest-router:get>
+			<rest-router:post>
+				<flow-ref name="ProcessPOST" doc:name="Process POST" />
+			</rest-router:post>
+		</rest-router:router>
+		<http:response-builder status="400" doc:name="Return 400 For bad URL">
+			<set-payload value="Unknown resource: #[message.inboundProperties['http.relative.path']]" />
+		</http:response-builder>
+	</flow>
+
+	<flow name="ProcessPOST" doc:name="ProcessPOST">
+		<http:response-builder status="200" doc:name="Return OK">
+			<set-payload value="Processing POST with account id: #[accountID] and user id: #[userID] and body: #[payload]" doc:name="Set Payload" />
+		</http:response-builder>
+
+	</flow>
+	<flow name="ProcessGET" doc:name="ProcessGET">
+		<http:response-builder status="200" doc:name="Return OK">
+			<set-payload value="Processing GET with account id: #[accountID] and user id: #[userID]" doc:name="Set Payload" />
+		</http:response-builder>
+	</flow>
+</mule>
