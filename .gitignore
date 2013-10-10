@@ -2,6 +2,7 @@
 .classpath
 target/
 flows/
+.studio/
 .settings/
 .mule/
 .bin/

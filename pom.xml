@@ -68,7 +68,7 @@
 				<version>1.9</version>
 				<extensions>true</extensions>
 				<configuration>
-					<excludeMuleDependencies>false</excludeMuleDependencies>
+					<excludeMuleDependencies>true</excludeMuleDependencies>
 					<inclusions>
 						<inclusion>
 							<groupId>org.mule.modules</groupId>
@@ -307,6 +307,7 @@
 			<groupId>com.mulesoft.muleesb.modules</groupId>
 			<artifactId>mule-module-data-mapper</artifactId>
 			<version>${mule.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Xml configuration -->
 
@@ -386,6 +387,7 @@
 			<groupId>org.mule.munit</groupId>
 			<artifactId>runner</artifactId>
 			<version>${munit.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mule.tests</groupId>
@@ -414,6 +416,10 @@
 	</dependencies>
 
 	<repositories>
+		<repository>
+            <id>dziesio-releases</id>
+            <url>http://localhost:8081/nexus/content/repositories/releases/</url>
+        </repository>
 		<repository>
 			<id>jboss</id>
 			<name>JBoss</name>

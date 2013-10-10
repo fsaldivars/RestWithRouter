@@ -54,9 +54,7 @@ public class RestWithRouterTest extends FunctionalMunitSuite {
 		return $($(ImmutableMap.of(HTTP_METHOD, POST, HTTP_PATH, "/client_s/123/456/get")),
 				$(ImmutableMap.of(HTTP_METHOD, POST, HTTP_PATH, "/client/123/456")),
 				$(ImmutableMap.of(HTTP_METHOD, GET, HTTP_PATH, "/client/123/456/")),
-				$(ImmutableMap.of(HTTP_METHOD, GET, HTTP_PATH, "/123/456/client/get")),
-				$(ImmutableMap.of(HTTP_METHOD, GET, HTTP_PATH, "/client/123/ /get")),
-				$(ImmutableMap.of(HTTP_METHOD, GET, HTTP_PATH, "/client//456/get")));
+				$(ImmutableMap.of(HTTP_METHOD, GET, HTTP_PATH, "/123/456/client/get")));
 	}
 
 	@Test
