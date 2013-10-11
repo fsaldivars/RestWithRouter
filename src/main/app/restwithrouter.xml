@@ -8,8 +8,21 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/rest-router http://www.mulesoft.org/schema/mule/rest-router/current/mule-rest-router.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+
+	<configuration doc:name="Configuration">
+		<expression-language>
+			<import class="org.mule.modules.rest.UnsupportedHttpVerbException" />
+		</expression-language>
+	</configuration>
+
+
 	<flow name="RestWithRouterFlow" doc:name="RestWithRouterFlow">
 		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8088" doc:name="HTTP" />
+		<message-filter doc:name="Filter favicon">
+			<not-filter>
+				<wildcard-filter pattern="/favicon.ico" caseSensitive="true" />
+			</not-filter>
+		</message-filter>
 
 		<rest-router:router templateUri="/client/{accountID}/{userID}/get">
 			<rest-router:get>
@@ -20,11 +33,11 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 			</rest-router:post>
 		</rest-router:router>
 		<http:response-builder status="400" doc:name="Return 400 For bad URL">
-			<set-payload value="Unknown resource: #[message.inboundProperties['http.relative.path']]" />
+			<set-payload value="Unknown resource: #[message.inboundProperties['http.request.path']]" />
 		</http:response-builder>
 		<choice-exception-strategy doc:name="Choice Exception Strategy">
-			<catch-exception-strategy when="#[exception.causedBy(org.mule.modules.rest.UnsupportedHttpVerbException)]"
-				enableNotifications="false" doc:name="Catch Exception Strategy">
+			<catch-exception-strategy when="#[exception.causedBy(UnsupportedHttpVerbException)]" enableNotifications="false"
+				doc:name="Catch Exception Strategy">
 				<http:response-builder status="400" doc:name="Return 400 For bad HTTP method">
 					<set-payload value="Unknown HTTP method: #[message.inboundProperties['http.method']]" />
 				</http:response-builder>
@@ -33,7 +46,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	</flow>
 
 	<flow name="ProcessPOST" doc:name="ProcessPOST">
-        <object-to-string-transformer doc:name="Object to String"/>
+		<object-to-string-transformer doc:name="Object to String" />
 		<http:response-builder status="200" doc:name="Return OK">
 			<set-payload value="Processing POST with account id: #[accountID] and user id: #[userID] and body: #[payload]" doc:name="Set Payload" />
 		</http:response-builder>
