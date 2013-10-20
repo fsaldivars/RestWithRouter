@@ -59,7 +59,7 @@ public class RestWithRouterTest extends FunctionalMunitSuite {
 
 	@Test
 	@Parameters(method = "badMethods")
-	public void shouldReturn400StatusFor_GoodURL_BadMethod(Map<String, Object> inboundProperties) throws Exception {
+	public void shouldReturn405StatusFor_GoodURL_BadMethod(Map<String, Object> inboundProperties) throws Exception {
 
 		MuleEvent testEvent = MuleEventEnricher.enrich(testEvent(SOME_PAYLOAD)).withInboundProperties(inboundProperties).get();
 		MuleEvent resultEvent = runFlow(REST_WITH_ROUTER_FLOW, testEvent);
@@ -70,7 +70,7 @@ public class RestWithRouterTest extends FunctionalMunitSuite {
 		assertThat(resultEvent.getMessage().getPayload(), is(instanceOf(HttpResponse.class)));
 
 		HttpResponse httpResponse = (HttpResponse) resultEvent.getMessage().getPayload();
-		assertThat(httpResponse.getStatusCode(), is(400));
+		assertThat(httpResponse.getStatusCode(), is(405));
 		assertTrue(httpResponse.getBodyAsString().contains("Unknown HTTP method"));
 	}
 

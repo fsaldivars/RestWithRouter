@@ -416,6 +416,12 @@
 	</dependencies>
 
 	<repositories>
+
+		<repository>
+			<id>dziesio-releases</id>
+			<url>http://localhost:8081/nexus/content/repositories/releases/</url>
+		</repository>
+
 		<repository>
 			<id>jboss</id>
 			<name>JBoss</name>

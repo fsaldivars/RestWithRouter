@@ -38,7 +38,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 		<choice-exception-strategy doc:name="Choice Exception Strategy">
 			<catch-exception-strategy when="#[exception.causedBy(UnsupportedHttpVerbException)]" enableNotifications="false"
 				doc:name="Catch Exception Strategy">
-				<http:response-builder status="400" doc:name="Return 400 For bad HTTP method">
+				<http:response-builder status="405" doc:name="Return 405 For bad HTTP method">
 					<set-payload value="Unknown HTTP method: #[message.inboundProperties['http.method']]" />
 				</http:response-builder>
 			</catch-exception-strategy>
